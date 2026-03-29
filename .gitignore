@@ -1,0 +1,65 @@
+# =========================
+# Node modules (global)
+# =========================
+node_modules/
+**/node_modules/
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# =========================
+# Env files (sensitive)
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Build / dist
+# =========================
+dist/
+build/
+frontend/dist/
+
+# =========================
+# Cache / temp
+# =========================
+.cache/
+.tmp/
+.temp/
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Editor / IDE
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# Vite specific
+# =========================
+frontend/node_modules/.vite/
+
+# =========================
+# Backend specific
+# =========================
+backend/uploads/
+backend/logs/
+
+# =========================
+# Misc
+# =========================
+coverage/

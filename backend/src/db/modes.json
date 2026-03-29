@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "principiante",
+    "label": "Modo Principiante",
+    "sublabel": "Sin jerga técnica",
+    "icon": "bi-patch-question",
+    "description": "Lenguaje simple y amigable, sin términos complicados. Perfecto para quienes están aprendiendo."
+  },
+  {
+    "id": 2,
+    "name": "profesor",
+    "label": "Modo Profesor",
+    "sublabel": "Detallado y claro",
+    "icon": "bi-person-video3",
+    "description": "Explicación paso a paso, ideal para aprender y entender a fondo el error."
+  },
+  {
+    "id": 3,
+    "name": "senior",
+    "label": "Modo Senior",
+    "sublabel": "Directo y técnico",
+    "icon": "bi-speedometer",
+    "description": "Respuesta concisa y técnica para desarrolladores experimentados que necesitan la solución rápido."
+  },
+  {
+    "id": 4,
+    "name": "tldr",
+    "label": "Modo TL;DR",
+    "sublabel": "Resumen breve",
+    "icon": "bi-lightning-fill",
+    "description": "Solo la causa y la solución en pocas líneas. Para cuando el tiempo es crítico."
+  },
+  {
+    "id": 5,
+    "name": "divertido",
+    "label": "Modo Divertido",
+    "sublabel": "Con humor y analogías",
+    "icon": "bi-emoji-smile",
+    "description": "Explicación con analogías ligeras para hacer el debugging menos estresante."
+  }
+]
