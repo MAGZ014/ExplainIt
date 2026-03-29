@@ -1,4 +1,4 @@
-import { ENDPOINT } from "@/helpers/endpoints";
+import { ENDPOINT } from "@/helpers/Endpoints";
 import axios from "axios";
 
 const api = axios.create({

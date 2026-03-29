@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/helpers/endpoints";
+import { BASE_URL } from "@/helpers/Endpoints";
 import axios from "axios";
 
 const api = axios.create({
