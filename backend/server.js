@@ -1,16 +1,14 @@
 import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
+import corsMiddleware from "./src/middleware/cors.js";
+import configEnv from "./src/configs/configEnv.js";
 
 import { router } from "./src/routes/index.js";
 
-dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = configEnv.PORT;
 
 // Middleware
-app.use(cors());
+app.use(corsMiddleware);
 app.use(express.json());
 
 // Root route
