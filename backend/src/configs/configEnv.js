@@ -7,6 +7,10 @@ const configEnv = {
     process.env.ALLOWED_ORIGINS ||
     process.env.ORIGIN ||
     "http://localhost:3000",
+
+  GROQ_API_KEY: process.env.GROQ_API_KEY || "",
+  OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY || "",
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
 };
 
 export default configEnv;

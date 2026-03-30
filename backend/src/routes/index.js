@@ -1,10 +1,12 @@
 import { Router } from "express";
 import { messageRouter } from "./api/message.routes.js";
 import { modesRouter } from "./api/modes.routes.js";
+import { explainRouter } from "./api/explain.routes.js";
 export const router = Router();
 
 router.use("/messages", messageRouter);
 router.use("/modes", modesRouter);
+router.use("/explain", explainRouter);
 
 // Health check
 router.get("/health", (req, res) => {
