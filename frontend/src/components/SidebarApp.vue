@@ -63,7 +63,6 @@
 </template>
 
 <script setup>
-import { defineEmits, defineProps } from "vue";
 import logo from "@/assets/LogoBiGemini.png";
 
 const { modes, selectedMode } = defineProps({

@@ -5,4 +5,5 @@ export const BASE_URL = Object.freeze(
 export const ENDPOINT = Object.freeze({
   MESSAGE: `${BASE_URL}/messages`,
   MODE: `${BASE_URL}/modes`,
+  EXPLAIN: `${BASE_URL}/explain`,
 });

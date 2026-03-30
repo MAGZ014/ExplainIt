@@ -44,8 +44,6 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
-
 const { activeModeObj } = defineProps({
   activeModeObj: { type: Object, required: true },
 });
