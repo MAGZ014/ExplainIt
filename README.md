@@ -19,15 +19,36 @@ ExplainIt recibe el stack trace o mensaje de error, lo analiza con IA y devuelve
 
 Desarrolladores de todos los niveles que quieren resolver errores más rápido, sin salir de su flujo de trabajo.
 
+El usuario puede elegir cómo quiere entender el error:
+
+#### 🧑‍🏫 Modo Profesor
+
+Explicación paso a paso y detallada
+
+#### 👶 Modo Principiante
+
+Lenguaje simple, sin jerga técnica
+
+#### 🧠 Modo Senior
+
+Respuesta directa, técnica y concisa
+
+#### ⚡ Modo TL;DR
+
+Resumen corto con la solución
+
+#### 😂 Modo Divertido
+
+Explicación con analogías ligeras
+
 ## Interfaces
 
 ### -
 
-![alt text](/public/image.png)
-
+![alt text](/public/image-1.png)
 ### -
 
-![alt text](/public/image-1.png)
+![alt text](/public/image.png)
 
 ### -
 

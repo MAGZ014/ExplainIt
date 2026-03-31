@@ -27,6 +27,7 @@
 
         <div class="flex flex-1 overflow-hidden">
           <section class="flex-1 flex flex-col overflow-hidden">
+            <!-- INPUT — altura fija, nunca encoge -->
             <div class="shrink-0 px-6 pt-6 pb-4">
               <div
                 class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden transition-all duration-300 app-item"
@@ -65,10 +66,12 @@
                   <div class="absolute bottom-4 right-4">
                     <button
                       @click="analyzeError"
-                      :disabled="!inputText.trim() || isLoading"
+                      :disabled="
+                        !inputText.trim() || isLoading || rateLimit.isBlocked
+                      "
                       class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                       :class="
-                        inputText.trim() && !isLoading
+                        inputText.trim() && !isLoading && !rateLimit.isBlocked
                           ? 'bg-cyan-500 text-gray-950 hover:bg-cyan-400 shadow-md shadow-cyan-500/20'
                           : 'bg-gray-800 text-gray-500'
                       "
@@ -92,10 +95,19 @@
               </div>
             </div>
 
+            <!-- Rate Limit Banner -->
+            <RateLimitBanner
+              :remaining="rateLimit.remaining"
+              :limit="rateLimit.limit"
+              :isBlocked="rateLimit.isBlocked"
+              :resetAt="rateLimit.resetAt"
+            />
+
+            <!-- RESPUESTA — área scrolleable independiente -->
             <div
-              class="flex-1 overflow-y-auto px-6 flex flex-col gap-4 custom-scroll"
+              class="flex-1 overflow-y-auto px-6 pb-6 flex flex-col gap-4 custom-scroll"
             >
-              <!-- Error banner -->
+              <!-- Error banner (errores que no son rate limit) -->
               <Transition name="slide-up">
                 <div
                   v-if="errorMsg"
@@ -154,7 +166,6 @@
                 </p>
               </div>
             </div>
-            <br />
           </section>
 
           <!-- Right Panel -->
@@ -168,14 +179,15 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import SplashScreen from "./components/SplashScreen.vue";
 import SidebarApp from "./components/SidebarApp.vue";
 import BotCards from "./components/BotCards.vue";
 import TopBarApp from "./components/TopBarApp.vue";
 import ResponseCard from "./components/ResponseCard.vue";
+import RateLimitBanner from "./components/RateLimitBanner.vue";
 import { getModes } from "./services/mode.js";
-import { explainError } from "./services/explain.js";
+import { explainError, rateLimitState } from "./services/explain.js";
 import { incrementCounter } from "./services/message.js";
 import { ERROR_EXAMPLES } from "./data/errorExamples.js";
 
@@ -199,6 +211,9 @@ const errorMsg = ref("");
 const selectedMode = ref("profesor");
 const topBarRef = ref(null);
 
+// Estado del rate limit — reactive proxy del objeto del servicio
+const rateLimit = reactive(rateLimitState);
+
 // ─── Modes ────────────────────────────────────────────────────────────────
 const getAllModes = async () => {
   try {
@@ -213,7 +228,6 @@ const activeModeObj = computed(
     modes.value.find((m) => m.name === selectedMode.value) || modes.value[0],
 );
 
-// Limpiar respuesta al cambiar de modo
 function onModeChange(newMode) {
   selectedMode.value = newMode;
   response.value = "";
@@ -224,7 +238,7 @@ function onModeChange(newMode) {
 
 // ─── Analyze ──────────────────────────────────────────────────────────────
 async function analyzeError() {
-  if (!inputText.value.trim() || isLoading.value) return;
+  if (!inputText.value.trim() || isLoading.value || rateLimit.isBlocked) return;
 
   isLoading.value = true;
   response.value = "";
@@ -234,30 +248,26 @@ async function analyzeError() {
 
   try {
     const result = await explainError(selectedMode.value, inputText.value);
-
     response.value = result.content;
     aiProvider.value = result.provider;
     aiModel.value = result.model;
 
-    // Incrementar contador en background
     incrementCounter().then(() => {
       topBarRef.value?.fetchCount?.();
     });
   } catch (err) {
-    errorMsg.value = err.message || "Error inesperado. Intenta de nuevo.";
+    // El rate limit ya se maneja visualmente en RateLimitBanner
+    if (!err.isRateLimit) {
+      errorMsg.value = err.message || "Error inesperado. Intenta de nuevo.";
+    }
   } finally {
     isLoading.value = false;
   }
 }
 
-function getRandomExample() {
-  const randomIndex = Math.floor(Math.random() * ERROR_EXAMPLES.length);
-  return ERROR_EXAMPLES[randomIndex];
-}
-
 function loadExample() {
-  const example = getRandomExample();
-  inputText.value = example.text;
+  const randomIndex = Math.floor(Math.random() * ERROR_EXAMPLES.length);
+  inputText.value = ERROR_EXAMPLES[randomIndex].text;
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -294,16 +304,13 @@ textarea::placeholder {
   transform: translateY(0);
 }
 
-/* Scroll personalizado */
 .custom-scroll::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
-
 .custom-scroll::-webkit-scrollbar-track {
   background: rgba(20, 20, 20, 0.6);
   border-radius: 10px;
 }
-
 .custom-scroll::-webkit-scrollbar-thumb {
   background: linear-gradient(
     180deg,
@@ -311,9 +318,7 @@ textarea::placeholder {
     rgba(59, 130, 246, 0.4)
   );
   border-radius: 10px;
-  transition: all 0.3s ease;
 }
-
 .custom-scroll::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(
     180deg,
@@ -321,8 +326,6 @@ textarea::placeholder {
     rgba(59, 130, 246, 0.7)
   );
 }
-
-/* Firefox */
 .custom-scroll {
   scrollbar-width: thin;
   scrollbar-color: rgba(34, 211, 238, 0.6) rgba(20, 20, 20, 0.6);
