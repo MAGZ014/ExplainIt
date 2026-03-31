@@ -238,14 +238,39 @@ const parsedSections = computed(() => {
 
 // ─── Copy actions ─────────────────────────────────────────────────────────
 async function copyResponse() {
-  await navigator.clipboard.writeText(props.response);
-  copied.value = true;
+  try {
+    await navigator.clipboard.writeText(props.response);
+    copied.value = true;
+  } catch {
+    // Fallback para contextos sin permisos de clipboard
+    const el = document.createElement("textarea");
+    el.value = props.response;
+    el.style.position = "fixed";
+    el.style.opacity = "0";
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    copied.value = true;
+  }
   setTimeout(() => (copied.value = false), 2000);
 }
 
 async function copyCode(code, idx) {
-  await navigator.clipboard.writeText(code);
-  copiedCode.value = idx;
+  try {
+    await navigator.clipboard.writeText(code);
+    copiedCode.value = idx;
+  } catch {
+    const el = document.createElement("textarea");
+    el.value = code;
+    el.style.position = "fixed";
+    el.style.opacity = "0";
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    copiedCode.value = idx;
+  }
   setTimeout(() => (copiedCode.value = null), 2000);
 }
 </script>
