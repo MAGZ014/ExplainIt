@@ -185,13 +185,13 @@ import SidebarApp from "./components/SidebarApp.vue";
 import BotCards from "./components/BotCards.vue";
 import TopBarApp from "./components/TopBarApp.vue";
 import ResponseCard from "./components/ResponseCard.vue";
-import RateLimitBanner from "./components/RateLimitBanner.vue";
+import RateLimitBanner from "./components/Ratelimitbanner.vue";
 import { getModes } from "./services/mode.js";
 import { explainError, rateLimitState } from "./services/explain.js";
 import { incrementCounter } from "./services/message.js";
 import { ERROR_EXAMPLES } from "./data/errorExamples.js";
 
-// ─── Splash ───────────────────────────────────────────────────────────────
+// ─── Splash ──────────────────────────────────────────────────────────────
 const splashVisible = ref(true);
 const appReady = ref(false);
 function onSplashDone() {
